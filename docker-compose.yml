@@ -1,0 +1,88 @@
+version: '3.4'
+
+services:
+  mypoints.apigateway:
+    image: ${DOCKER_REGISTRY-}mypointsapigateway
+    build:
+      context: .
+      dockerfile: src/ApiGateway/MyPoints.ApiGateway/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "3000:80"
+    networks:
+      - mypoints-network
+    depends_on: 
+      - mypoints.account
+      - mypoints.catalog
+
+  mypoints.account:
+    image: ${DOCKER_REGISTRY-}mypointsaccount
+    build:
+      context: .
+      dockerfile: src/services/MyPoints.Account/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - CONNECTIONSTRINGS__DEFAULTCONNECTION=Server=db;Database=Account;Uid=root;Pwd=root;
+    ports:
+      - "3003:80"
+    networks:
+      - mypoints-network
+    depends_on: 
+      - db
+
+
+  mypoints.catalog:
+    image: ${DOCKER_REGISTRY-}mypointscatalog
+    build:
+      context: .
+      dockerfile: src/services/MyPoints.Catalog/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - CONNECTIONSTRINGS__DEFAULTCONNECTION=Server=db;Database=Catalog;Uid=root;Pwd=root;
+    ports:
+      - "3002:80"
+    networks:
+      - mypoints-network
+    depends_on: 
+      - db
+
+
+  mypoints.identity:
+    image: ${DOCKER_REGISTRY-}mypointsidentity
+    build:
+      context: .
+      dockerfile: src/services/MyPoints.Identity/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - CONNECTIONSTRINGS__DEFAULTCONNECTION=Server=db;Database=Identity;Uid=root;Pwd=root;
+    ports:
+      - "3001:80"
+    networks:
+      - mypoints-network
+    depends_on: 
+      - db
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: Identity
+    networks:
+      - mypoints-network
+    volumes: 
+      - ./sql:/docker-entrypoint-initdb.d
+
+  mypoints.adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    networks:
+      - mypoints-network
+
+
+networks:
+  mypoints-network:
+    driver: bridge
