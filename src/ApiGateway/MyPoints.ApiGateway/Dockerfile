@@ -7,10 +7,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["MyPoints.ApiGateway/MyPoints.ApiGateway.csproj", "MyPoints.ApiGateway/"]
-RUN dotnet restore "MyPoints.ApiGateway/MyPoints.ApiGateway.csproj"
+COPY ["src/ApiGateway/MyPoints.ApiGateway/MyPoints.ApiGateway.csproj", "src/ApiGateway/MyPoints.ApiGateway/"]
+RUN dotnet restore "src/ApiGateway/MyPoints.ApiGateway/MyPoints.ApiGateway.csproj"
 COPY . .
-WORKDIR "/src/MyPoints.ApiGateway"
+WORKDIR "/src/src/ApiGateway/MyPoints.ApiGateway"
 RUN dotnet build "MyPoints.ApiGateway.csproj" -c Release -o /app/build
 
 FROM build AS publish
