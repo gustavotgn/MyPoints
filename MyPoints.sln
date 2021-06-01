@@ -19,6 +19,13 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyPoints.ApiGateway", "src\ApiGateway\MyPoints.ApiGateway\MyPoints.ApiGateway.csproj", "{17874EB4-68E3-43E4-A02B-A6C24B389EC5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sql", "sql", "{C8B5B16C-EB7F-423A-A195-4BFE728CEE29}"
+	ProjectSection(SolutionItems) = preProject
+		sql\01.sql = sql\01.sql
+		sql\02.sql = sql\02.sql
+		sql\Account.sql = sql\Account.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
