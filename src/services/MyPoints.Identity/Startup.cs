@@ -16,6 +16,10 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using MyPoints.Identity.Services;
 using MyPoints.Identity.Domain.Interfaces;
+using Microsoft.Extensions.Options;
+using MyPoints.Identity.Configurations;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 namespace MyPoints.Identity
 {
@@ -61,6 +65,19 @@ namespace MyPoints.Identity
                 };
             });
             services.AddSwaggerGen();
+
+            var rabbitMQConfigurations = new RabbitMQConfigurations();
+            new ConfigureFromConfigurationOptions<RabbitMQConfigurations>(
+                _configuration.GetSection("RabbitMQConfigurations"))
+                    .Configure(rabbitMQConfigurations);
+            services.AddSingleton(rabbitMQConfigurations);
+
+            // Verificando a disponibilidade do broker de mensageria
+            // através de Health Checks
+            services.AddHealthChecks()
+                .AddRabbitMQ(_configuration.GetConnectionString("RabbitMQ"), name: "rabbitMQ");
+            services.AddHealthChecksUI();
+
         }
 
 
@@ -83,6 +100,16 @@ namespace MyPoints.Identity
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // Gera o endpoint que retornará os dados utilizados no dashboard
+            app.UseHealthChecks("/healthchecks-data-ui", new HealthCheckOptions() {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+
+            // Ativa o dashboard para a visualização da situação de cada Health Check
+            app.UseHealthChecksUI();
+
 
             app.UseHttpsRedirection();
 

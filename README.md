@@ -18,6 +18,7 @@ https://www.getpostman.com/collections/65f4d509c604224cd4af
 	- permissionamento
 	- etc
 - Fila/Mensageria (Devido a falta de tempo as integrações tiveram que ser em REST)
+	- Em **desenvolvimento** utilizando **rabbitmq**
 - Fluxo assincrono ao realizar o pedido de resgate (Criar uma estrutura que permitisse o processamento de um pedido de forma assincrona levaria mais tempo que o disponivel)
 - Logs com persistencia em algum storage
 - Controle de exibição de erros e tratamento de exceções
