@@ -17,8 +17,14 @@ https://www.getpostman.com/collections/65f4d509c604224cd4af
 	- controle de acessos
 	- permissionamento
 	- etc
+- Pedido com status de entrega
 - Fila/Mensageria (Devido a falta de tempo as integrações tiveram que ser em REST)
 - Fluxo assincrono ao realizar o pedido de resgate (Criar uma estrutura que permitisse o processamento de um pedido de forma assincrona levaria mais tempo que o disponivel)
+	- Receber o pedido
+	- Validar dados
+	- Realizar cobrança
+	- Aprovar Resgate
+	- Liberar para entrega
 - Logs com persistencia em algum storage
 - Controle de exibição de erros e tratamento de exceções
 - gRPC/Melhor configuração do Ocelot
