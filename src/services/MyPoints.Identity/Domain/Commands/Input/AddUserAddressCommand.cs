@@ -20,7 +20,7 @@ namespace MyPoints.Identity.Domain.Commands.Input
         public void Validate()
         {
             AddNotifications(new Contract()
-                .HasMinLen(Street, 2, nameof(Street), "Field length cannot be less than 2 characters")
+                .HasMinLen(Street, 1, nameof(Street), "Field length cannot be less than 2 characters")
                 .HasMaxLen(Street, 255, nameof(Street), "Field length cannot be more than 255 characters")
 
                 .HasMinLen(City, 2, nameof(City), "Field length cannot be less than 2 characters")
