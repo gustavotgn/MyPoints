@@ -1,4 +1,4 @@
-﻿using MyPoints.Catalog.Domain.Interfaces;
+﻿using MyPoints.CommandContract.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

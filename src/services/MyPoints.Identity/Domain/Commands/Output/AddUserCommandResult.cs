@@ -1,4 +1,4 @@
-﻿using MyPoints.Identity.Domain.Interfaces;
+﻿using MyPoints.CommandContract.Interfaces;
 
 namespace MyPoints.Identity.Domain.Commands.Output
 {

@@ -1,19 +1,11 @@
-using AutoMapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
-using MyPoints.Catalog.Data;
-using MyPoints.Catalog.Data.Interfaces;
-using System.Text;
-using MyPoints.Catalog.Domain.Commands.Input;
-using MediatR;
-using MyPoints.Catalog.Domain.Mappers;
-using MyPoints.Catalog.Services;
-using MyPoints.Catalog.Domain.Interfaces;
+using MyPoints.Catalog.Extensions;
 
 namespace MyPoints.Catalog
 {
@@ -30,37 +22,26 @@ namespace MyPoints.Catalog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+            services.AddServices(_configuration);
 
-            services.AddScoped<ICatalogContext, CatalogContext>();
-            services.AddMediatR(typeof(AddProductCommand));
-            services.AddAutoMapper(typeof(ProductProfile));
-            services.AddScoped<IRestService, RestService>();
-            services.AddHttpContextAccessor();
             services.AddControllers();
 
-            var key = Encoding.ASCII.GetBytes(Configurations.Settings.Secret);
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
+            services.AddAuth();
+
             services.AddSwaggerGen();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder
+                    .SetIsOriginAllowed((host) => true)
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
+
         }
 
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // Enable middleware to serve generated Swagger as a JSON endpoint.
@@ -73,12 +54,21 @@ namespace MyPoints.Catalog
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
-            System.Console.WriteLine(env.EnvironmentName);
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // Gera o endpoint que retornará os dados utilizados no dashboard
+            app.UseHealthChecks("/healthchecks-data-ui", new HealthCheckOptions() {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+
+            // Ativa o dashboard para a visualização da situação de cada Health Check
+            app.UseHealthChecksUI();
+
 
             app.UseHttpsRedirection();
 
@@ -91,6 +81,9 @@ namespace MyPoints.Catalog
             {
                 endpoints.MapControllers();
             });
+
+            app.UseCors("CorsPolicy");
+
         }
     }
 }

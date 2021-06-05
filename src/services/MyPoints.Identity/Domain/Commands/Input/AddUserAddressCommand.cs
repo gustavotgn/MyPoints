@@ -1,7 +1,7 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
+using MyPoints.CommandContract.Interfaces;
 using MyPoints.Identity.Domain.Commands.Output;
-using MyPoints.Identity.Domain.Interfaces;
 using System.Text.Json.Serialization;
 
 namespace MyPoints.Identity.Domain.Commands.Input

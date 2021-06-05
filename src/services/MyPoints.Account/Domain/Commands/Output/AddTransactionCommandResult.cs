@@ -1,5 +1,5 @@
 ﻿using MyPoints.Account.Domain.Enums;
-using MyPoints.Account.Domain.Interfaces;
+using MyPoints.CommandContract.Interfaces;
 
 namespace MyPoints.Account.Domain.Commands.Output
 {

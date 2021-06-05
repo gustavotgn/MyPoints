@@ -2,8 +2,9 @@
 using Flunt.Validations;
 using MyPoints.Account.Domain.Commands.Output;
 using MyPoints.Account.Domain.Enums;
-using MyPoints.Account.Domain.Interfaces;
 using System.Text.Json.Serialization;
+using MyPoints.CommandContract.Interfaces;
+
 
 namespace MyPoints.Account.Domain.Commands.Input
 {

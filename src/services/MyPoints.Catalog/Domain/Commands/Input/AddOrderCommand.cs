@@ -1,7 +1,7 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
 using MyPoints.Catalog.Domain.Commands.Output;
-using MyPoints.Catalog.Domain.Interfaces;
+using MyPoints.CommandContract.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

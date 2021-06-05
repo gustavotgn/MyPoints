@@ -1,8 +1,4 @@
-﻿using MyPoints.Account.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using MyPoints.CommandContract.Interfaces;
 
 namespace MyPoints.Account.Domain.Commands.Output
 {

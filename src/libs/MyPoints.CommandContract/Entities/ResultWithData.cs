@@ -1,11 +1,10 @@
 ﻿using Flunt.Notifications;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace MyPoints.Catalog.Domain.Entities
+namespace MyPoints.CommandContract.Entities
 {
     public class ResultWithData<TData>
     {

@@ -10,8 +10,9 @@
         }
       ],
       "UpstreamPathTemplate": "/api/identity/{everything}",
-      "UpstreamHttpMethod": [ "POST", "PUT", "GET", "DELETE" ]
-     
+      "UpstreamHttpMethod": [ "POST", "PUT", "GET", "DELETE" ],
+      "SwaggerKey": "identity"
+
     },
     {
       "DownstreamPathTemplate": "/{everything}",
@@ -23,7 +24,8 @@
         }
       ],
       "UpstreamPathTemplate": "/api/catalog/{everything}",
-      "UpstreamHttpMethod": [ "POST", "PUT", "GET", "DELETE" ]
+      "UpstreamHttpMethod": [ "POST", "PUT", "GET", "DELETE" ],
+      "SwaggerKey": "catalog"
 
     },
     {
@@ -36,10 +38,41 @@
         }
       ],
       "UpstreamPathTemplate": "/api/account/{everything}",
-      "UpstreamHttpMethod": [ "POST", "PUT", "GET" ,"DELETE"]
-
-    } 
-
+      "UpstreamHttpMethod": [ "POST", "PUT", "GET", "DELETE" ],
+      "SwaggerKey": "account"
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "catalog",
+      "Config": [
+        {
+          "Name": "Catalog Api",
+          "Version": "v1",
+          "Url": "http://mypoints.catalog/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "identity",
+      "Config": [
+        {
+          "Name": "Identity Api",
+          "Version": "v1",
+          "Url": "http://mypoints.identity/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "Account",
+      "Config": [
+        {
+          "Name": "Account Api",
+          "Version": "v1",
+          "Url": "http://mypoints.account/swagger/v1/swagger.json"
+        }
+      ]
+    }
   ],
   "GlobalConfiguration": {
     "RequestIdKey": "OcRequestId",

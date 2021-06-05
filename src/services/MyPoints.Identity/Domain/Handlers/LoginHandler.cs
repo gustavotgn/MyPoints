@@ -1,9 +1,9 @@
 ﻿using Flunt.Notifications;
+using MyPoints.CommandContract.Entities;
+using MyPoints.CommandContract.Interfaces;
 using MyPoints.Identity.Data.Interfaces;
 using MyPoints.Identity.Domain.Commands.Input;
 using MyPoints.Identity.Domain.Commands.Output;
-using MyPoints.Identity.Domain.Entities;
-using MyPoints.Identity.Domain.Interfaces;
 using MyPoints.Identity.Services;
 using System;
 using System.Collections.Generic;

@@ -1,11 +1,10 @@
 ﻿using MediatR;
-using MyPoints.Catalog.Domain.Entities;
+using MyPoints.CommandContract.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace MyPoints.Catalog.Domain.Interfaces
+namespace MyPoints.CommandContract.Interfaces
 {
     public interface IHandler<TCommand, TCommandResult>
             : IRequestHandler<TCommand, ResultWithData<TCommandResult>>

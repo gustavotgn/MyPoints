@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace MyPoints.Identity.Configurations
+namespace MyPoints.Message.Integration.Settings
 {
-    public class RabbitMQConfigurations
+    public class RabbitMQSettings
     {
         public string HostName { get; set; }
         public int Port { get; set; }

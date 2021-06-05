@@ -1,11 +1,7 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
 using MyPoints.Catalog.Domain.Commands.Output;
-using MyPoints.Catalog.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MyPoints.CommandContract.Interfaces;
 
 namespace MyPoints.Catalog.Domain.Commands.Input
 {

@@ -1,13 +1,10 @@
 ﻿using Flunt.Notifications;
+using MyPoints.CommandContract.Entities;
+using MyPoints.CommandContract.Interfaces;
 using MyPoints.Identity.Data.Interfaces;
 using MyPoints.Identity.Domain.Commands.Input;
 using MyPoints.Identity.Domain.Commands.Output;
-using MyPoints.Identity.Domain.Entities;
-using MyPoints.Identity.Domain.Interfaces;
 using MyPoints.Identity.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,12 +15,12 @@ namespace MyPoints.Identity.Domain.Handlers
         IHandler<AddUserAddressCommand, AddUserAddressCommandResult>
     {
         private readonly IIdentityContext _context;
-        private readonly IRestService _queue;
+        private readonly IMessageService _message;
 
-        public UserHandler(IIdentityContext context, IRestService queue)
+        public UserHandler(IIdentityContext context, IMessageService message)
         {
             _context = context;
-            _queue = queue;
+            _message = message;
         }
 
 
@@ -63,7 +60,7 @@ namespace MyPoints.Identity.Domain.Handlers
             }
             finally
             {
-                _queue.SendAsync(UrlNames.AddAccount, new { },token: token);
+                _message.Enqueue("register-account", new { userId });
 
             }
 

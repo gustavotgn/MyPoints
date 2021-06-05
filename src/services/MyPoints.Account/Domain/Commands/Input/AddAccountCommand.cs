@@ -1,12 +1,8 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
 using MyPoints.Account.Domain.Commands.Output;
-using MyPoints.Account.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using MyPoints.CommandContract.Interfaces;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace MyPoints.Account.Domain.Commands.Input
 {

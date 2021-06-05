@@ -3,12 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyPoints.Identity.Data.Interfaces;
 using MyPoints.Identity.Domain.Commands.Input;
-using MyPoints.Identity.Domain.Commands.Output;
-using MyPoints.Identity.Domain.Interfaces;
-using MyPoints.Identity.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyPoints.Identity.Controllers
@@ -19,22 +13,13 @@ namespace MyPoints.Identity.Controllers
     {
         private readonly IIdentityContext _context;
         private readonly IMediator _mediator;
-        private readonly IRestService _queue;
 
-        public LoginController(IIdentityContext context, IMediator mediator, IRestService queue)
+        public LoginController(IIdentityContext context, IMediator mediator)
         {
             _context = context;
             _mediator = mediator;
-            _queue = queue;
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> Test()
-        {
-            _queue.SendAsync(UrlNames.VerifyAccount,"teste",RestSharp.Method.GET);
-            return Ok();
-        }
 
         [HttpPost]
         [AllowAnonymous]

@@ -2,13 +2,10 @@
 using MyPoints.Account.Data.Interfaces;
 using MyPoints.Account.Domain.Commands.Input;
 using MyPoints.Account.Domain.Commands.Output;
-using MyPoints.Account.Domain.Entities;
-using MyPoints.Account.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MyPoints.CommandContract.Interfaces;
+using MyPoints.CommandContract.Entities;
 
 namespace MyPoints.Account.Domain.Handlers
 {
