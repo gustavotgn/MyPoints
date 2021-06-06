@@ -10,4 +10,9 @@ namespace MyPoints.CommandContract.Interfaces
     {
         void Validate();
     }
+
+    public interface ICommand : INotification
+    {
+        void Validate();
+    }
 }

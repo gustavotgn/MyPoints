@@ -13,7 +13,8 @@ namespace MyPoints.Account.Domain.Mappers
         public TransactionProfile()
         {
 
-            CreateMap<AddTransactionCommand, AddTransactionCommandResult>();
+            CreateMap<AddPurchaseTransactionCommand, AddPurchaseTransactionCommandResult>();
+            CreateMap<AddRechargeTransactionCommand, AddRechargeTransactionCommandResult>();
         }
     }
 }

@@ -13,4 +13,9 @@ namespace MyPoints.CommandContract.Interfaces
     {
 
     }
+
+    public interface IHandler<TCommand> : INotificationHandler<TCommand> where TCommand : ICommand
+    {
+
+    }
 }

@@ -3,6 +3,7 @@ using Dapper;
 using MyPoints.Identity.Data;
 using MyPoints.Identity.Domain.Commands.Input;
 using MyPoints.Identity.Domain.Commands.Output;
+using MyPoints.Identity.Domain.Queries;
 using MyPoints.Identity.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -48,27 +49,21 @@ namespace MyPoints.Identity.Repositories
                 throw;
             }
         }
-        public async Task<int> GetAsync(int id)
+        public async Task<AddressQueryResult> GetAsync(int id)
         {
-            var transaction = _context.Connection.BeginTransaction();
-            try
-            {
+            return await _context.Connection.QueryFirstOrDefaultAsync<AddressQueryResult>(@"
+                SELECT * FROM Address 
+                WHERE Id = @id; ", new { id });
 
-                await _context.Connection.QueryAsync<int>(@"
-                    INSERT INTO Address (Street,City,PostalCode,State,Complements,Number)
-                    VALUES(@Street,@City,@PostalCode,@State,@Complements,@Number);
-                    SELECT LAST_INSERT_ID();", new { id });
+        }
 
+        public async Task<AddressQueryResult> GetByUserIdAsync(int userId)
+        {
+            return await _context.Connection.QueryFirstOrDefaultAsync<AddressQueryResult>(@"
+                    SELECT Address.* FROM Address
+                        INNER JOIN User ON User.AddressId = Address.Id 
+                    WHERE User.Id = @userId;", new { userId });
 
-                transaction.Commit();
-
-                return id;
-            }
-            catch (Exception ex)
-            {
-                transaction.Rollback();
-                throw;
-            }
         }
     }
 }

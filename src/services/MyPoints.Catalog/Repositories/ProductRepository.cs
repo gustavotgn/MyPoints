@@ -30,8 +30,8 @@ namespace MyPoints.Catalog.Repositories
             {
 
                 var id = await _context.Connection.ExecuteScalarAsync<int>(@"
-                    INSERT INTO Product (Description,Price,IsActive,Count)
-                    VALUES (@Description,@Price,@IsActive,@Count);
+                    INSERT INTO Product (Description,Value,IsActive,Count)
+                    VALUES (@Description,@Value,@IsActive,@Count);
                     SELECT LAST_INSERT_ID();", request);
                 
 

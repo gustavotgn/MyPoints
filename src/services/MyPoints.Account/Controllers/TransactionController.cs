@@ -39,8 +39,8 @@ namespace MyPoints.Account.Controllers
             return Ok(account);
 
         }
-        [HttpPost()]
-        public async Task<IActionResult> AddTransaction(AddTransactionCommand command)
+        [HttpPost("Recharge")]
+        public async Task<IActionResult> AddTransaction(AddRechargeTransactionCommand command)
         {
             command.UserId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 

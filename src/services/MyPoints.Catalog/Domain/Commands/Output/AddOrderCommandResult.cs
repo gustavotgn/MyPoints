@@ -8,11 +8,18 @@ namespace MyPoints.Catalog.Domain.Commands.Output
 {
     public class AddOrderCommandResult : ICommandResult
     {
+        public string Message { get; set; }
+
         public int Id { get; set; }
+
         public int UserId { get; set; }
+
         public int ProductId { get; set; }
-        public decimal Price { get; set; }
+
+        public decimal Value { get; set; }
+
         public int TransactionId { get; set; }
-        public string DeliveryAddress { get; set; }
+
+        public AddOrderAddressCommandResult Address { get; set; }
     }
 }

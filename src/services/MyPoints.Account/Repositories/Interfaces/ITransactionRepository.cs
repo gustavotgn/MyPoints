@@ -11,6 +11,7 @@ namespace MyPoints.Account.Repositories.Interfaces
     public interface ITransactionRepository
     {
         Task<TransactionQueryResult> GetByAccountIdAsync(int userId);
-        Task<AddTransactionCommandResult> AddAsync(AddTransactionCommand request);
+        Task<AddPurchaseTransactionCommandResult> AddAsync(AddPurchaseTransactionCommand request);
+        Task<AddRechargeTransactionCommandResult> AddAsync(AddRechargeTransactionCommand request);
     }
 }

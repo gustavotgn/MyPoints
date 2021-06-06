@@ -11,6 +11,10 @@ namespace MyPoints.Catalog.Repositories.Interfaces
     public interface IOrderRepository
     {
         Task<AddOrderCommandResult> AddAsync(AddOrderCommand request);
-        Task<IList<OrderQueryResult>> GetAsync(int userId);
+        Task<IList<OrderQueryResult>> GetByUserIdAsync(int userId);
+        Task<InvalidOrderCommandResult> UpdateOrderAsync(InvalidOrderCommand invalidOrderCommand);
+        Task<PaymentRejectedCommandResult> UpdateOrderAsync(PaymentRejectedCommand request);
+        Task UpdateOrderAsync(UpdateOrderStatusCommand request);
+        Task AddAddressAsync(RegisterOrderAddressCommand request);
     }
 }

@@ -9,8 +9,13 @@ namespace MyPoints.Catalog.Domain.Queries
     {
         public int Id { get; set; }
         public string Product { get; set; }
-        public decimal Price { get; set; }
+        public decimal Value { get; set; }
+        public string Status { get; set; }
         public int TransactionId { get; set; }
-        public string DeliveryAddress { get; set; }
+        internal int AddressId { get; set; }
+        public OrderAddressQueryResult Address { get; set; }
+        public DateTime CreatedDate { get; set; }
+
+        public List<OrderNotificationQueryResult> Notifications { get; set; }
     }
 }

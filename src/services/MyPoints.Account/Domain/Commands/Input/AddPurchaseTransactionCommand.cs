@@ -8,12 +8,16 @@ using MyPoints.CommandContract.Interfaces;
 
 namespace MyPoints.Account.Domain.Commands.Input
 {
-    public class AddTransactionCommand : Notifiable, ICommand<AddTransactionCommandResult>
+    public class AddPurchaseTransactionCommand : Notifiable, ICommand<AddPurchaseTransactionCommandResult>
     {
-        [JsonIgnore]
+        public int OrderId { get; set; }
         public int UserId { get; set; }
-        public ETransactionType TransactionTypeId { get; set; }
-        public decimal Value { get; set; }
+        public ETransactionType TransactionTypeId { get => ETransactionType.Purchase; }
+        public EOrderStatus StatusId { get; set; }
+
+        private decimal _value;
+        public decimal Value { get => _value  ; set => _value = value > 0 ? value * -1 : value; }
+
         public int? ProductId { get; set; }
 
         public void Validate()
@@ -26,11 +30,11 @@ namespace MyPoints.Account.Domain.Commands.Input
             {
                 AddNotification(new Notification("Transaction", "Recharge needs be more than 0"));
             }
-            if (TransactionTypeId == ETransactionType.Buy && Value > 0)
+            if (TransactionTypeId == ETransactionType.Purchase && Value > 0)
             {
                 AddNotification(new Notification("Transaction", "Buy needs be less than 0"));
             }
-            if (TransactionTypeId == ETransactionType.Buy && !ProductId.HasValue)
+            if (TransactionTypeId == ETransactionType.Purchase && !ProductId.HasValue)
             {
                 AddNotification(new Notification("ProductId", "Can not be null"));
             }

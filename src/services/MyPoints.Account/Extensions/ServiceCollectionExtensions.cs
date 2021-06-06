@@ -20,6 +20,8 @@ using MyPoints.Account.Domain.Mappers;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using MyPoints.CommandContract.Interfaces;
+using MyPoints.Message.Integration.Services;
 
 namespace MyPoints.Account.Extensions
 {
@@ -35,12 +37,16 @@ namespace MyPoints.Account.Extensions
             services.AddMediatR(typeof(AddAccountCommand));
             services.AddAutoMapper(typeof(AccountProfile));
 
+            services.AddHttpContextAccessor();
+            services.AddScoped<ISyncIntegrationService, RestService>();
+
             RabbitMQSettings rabbitConfiguration = new RabbitMQSettings();
             configuration.GetSection("RabbitMQConfigurations").Bind(rabbitConfiguration);
 
             services.AddHealthChecks()
                 .AddRabbitMQ(configuration.GetConnectionString("RabbitMQ"), name: "rabbitMQ");
             services.AddHealthChecksUI();
+
 
             services.ConfigureRabbitMQConnection(options =>
             {
@@ -49,7 +55,8 @@ namespace MyPoints.Account.Extensions
                 options.UserName = rabbitConfiguration.UserName;
                 options.Password = rabbitConfiguration.Password;
             }).AddRabbitMQMessageService()
-            .AddRabbiMQConsumer<AddAccountCommand, AddAccountCommandResult>("register-account");
+            .AddRabbiMQConsumer<AddAccountCommand, AddAccountCommandResult>("register-account")
+            .AddRabbiMQConsumer<AddPurchaseTransactionCommand, AddPurchaseTransactionCommandResult>("add-purchase-transaction");
         }
         public static void AddAuth(this IServiceCollection services)
         {

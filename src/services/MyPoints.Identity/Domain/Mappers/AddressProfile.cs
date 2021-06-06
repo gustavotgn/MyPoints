@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MyPoints.Identity.Domain.Commands.Input;
 using MyPoints.Identity.Domain.Commands.Output;
+using MyPoints.Identity.Domain.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

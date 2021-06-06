@@ -9,7 +9,7 @@ namespace MyPoints.Catalog.Domain.Queries
     {
         public int Id { get; set; }
         public string Description { get; set; }
-        public decimal Price { get; set; }
+        public decimal Value { get; set; }
         public bool IsActive { get; set; }
         public int Count { get; set; }
 

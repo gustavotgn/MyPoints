@@ -10,7 +10,7 @@ namespace MyPoints.Catalog.Domain.Commands.Output
     {
         public int Id { get; set; }
         public string Description { get; set; }
-        public object Price { get; set; }
+        public object Value { get; set; }
         public bool IsActive { get; set; }
         public int Count { get; set; }
 

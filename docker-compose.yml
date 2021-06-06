@@ -30,6 +30,7 @@ services:
       - mypoints-network
     depends_on: 
       - db
+      - rabbitmq
 
 
   mypoints.catalog:
@@ -46,6 +47,7 @@ services:
       - mypoints-network
     depends_on: 
       - db
+      - rabbitmq
 
 
   mypoints.identity:
@@ -62,6 +64,7 @@ services:
       - mypoints-network
     depends_on: 
       - db
+      - rabbitmq
 
   db:
     image: mysql
@@ -81,6 +84,8 @@ services:
       - 8080:8080
     networks:
       - mypoints-network
+    depends_on: 
+      - db
 
   rabbitmq:
     image: rabbitmq:3-management-alpine

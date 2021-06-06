@@ -44,8 +44,11 @@ namespace MyPoints.Catalog.Extensions
                 options.Port = rabbitConfiguration.Port;
                 options.UserName = rabbitConfiguration.UserName;
                 options.Password = rabbitConfiguration.Password;
-            }).AddRabbitMQMessageService();
-            //.AddRabbiMQConsumer<AddProductCommand, AddProductCommandResult>("register-account");
+            }).AddRabbitMQMessageService()
+            .AddRabbiMQConsumer<InvalidOrderCommand,InvalidOrderCommandResult>("invalid-order")
+            .AddRabbiMQConsumer<InvalidOrderCommand,InvalidOrderCommandResult>("payment-rejected")
+            .AddRabbiMQConsumer<UpdateOrderStatusCommand,UpdateOrderStatusCommandResult>("update-order-status")
+            .AddRabbiMQConsumer<RegisterOrderAddressCommand, RegisterOrderAddressCommandResult>("register-order-address");
         }
         public static void AddAuth(this IServiceCollection services)
         {

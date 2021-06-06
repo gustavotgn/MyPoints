@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using MyPoints.Identity.Data;
 using MyPoints.Identity.Data.Interfaces;
 using MyPoints.Identity.Domain.Commands.Input;
+using MyPoints.Identity.Domain.Commands.Output;
 using MyPoints.Identity.Domain.Mappers;
 using MyPoints.Message.Integration.Extensions;
 using MyPoints.Message.Integration.Settings;
@@ -38,7 +39,8 @@ namespace MyPoints.Identity.Extensions
                 options.Port = rabbitConfiguration.Port;
                 options.UserName = rabbitConfiguration.UserName;
                 options.Password = rabbitConfiguration.Password;
-            }).AddRabbitMQMessageService();
+            }).AddRabbitMQMessageService()
+            .AddRabbiMQConsumer<ValidateOrderAddressCommand,ValidateOrderAddressCommandResult>("validate-order-address");
         }
         public static void AddAuth(this IServiceCollection services)
         {

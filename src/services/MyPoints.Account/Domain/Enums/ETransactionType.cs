@@ -3,6 +3,6 @@
     public enum ETransactionType
     {
         Recharge = 1,
-        Buy = 2,
+        Purchase = 2,
     }
 }

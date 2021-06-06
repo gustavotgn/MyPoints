@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyPoints.Catalog.Data.Interfaces;
 using MyPoints.Catalog.Domain.Commands.Input;
@@ -11,6 +12,7 @@ namespace MyPoints.Catalog.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class OrderController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -45,7 +47,7 @@ namespace MyPoints.Catalog.Controllers
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            var result = await _context.Order.GetAsync(userId);
+            var result = await _context.Order.GetByUserIdAsync(userId);
 
             if (result!= null && result.Count>0)
             {

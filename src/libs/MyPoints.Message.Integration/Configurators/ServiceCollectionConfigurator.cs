@@ -7,6 +7,7 @@ using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyPoints.Message.Integration.Configurators
 {
@@ -38,8 +39,24 @@ namespace MyPoints.Message.Integration.Configurators
                 UserName = UserName,
                 Password = Password
             };
-
-            _conn = _factory.CreateConnection();
+            int count = 0;
+            while (true)
+            {
+                count++;
+                try
+                {
+                    _conn = _factory.CreateConnection();
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    if (count > 40)
+                    {
+                        throw ex;
+                    }
+                    Task.Delay(2000).Wait();
+                }
+            }
             _channel = _conn.CreateModel();
 
             return new RabbitConnections(_factory, _conn, _channel, _services);
