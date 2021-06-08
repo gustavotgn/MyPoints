@@ -1,4 +1,5 @@
 ﻿using Flunt.Notifications;
+using Flunt.Validations;
 using MyPoints.CommandContract.Interfaces;
 using MyPoints.Identity.Domain.Commands.Output;
 using MyPoints.Identity.Domain.Enums;
@@ -19,7 +20,13 @@ namespace MyPoints.Identity.Domain.Commands.Input
 
         public void Validate()
         {
-
+            AddNotifications(new Contract()
+                .IsGreaterThan(OrderId, 0, nameof(OrderId), "OrderId can not be null")
+                .IsGreaterThan(UserId, 0, nameof(UserId), "UserId can not be null")
+                .IsNotNull(TransactionTypeId, nameof(TransactionTypeId), "TransactionTypeId can not be null")
+                .IsGreaterThan(Value, 0, nameof(Value), "Value can not be 0 or less")
+                .IsGreaterThan(ProductId, 0, nameof(ProductId), "Value can not be 0 or less")
+            );
         }
     }
 }
