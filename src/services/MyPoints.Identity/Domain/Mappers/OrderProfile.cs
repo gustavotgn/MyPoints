@@ -19,6 +19,7 @@ namespace MyPoints.Identity.Domain.Mappers
             CreateMap<ValidateOrderAddressCommand, ValidateOrderAddressCommandResult>();
 
             CreateMap<AddPurchaseTransactionCommand,UpdateOrderStatusDto>();
+
             CreateMap<AddressQueryResult, RegisterOrderAddressAddressDto>();
 
         }

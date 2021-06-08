@@ -12,19 +12,20 @@ using System.Threading.Tasks;
 
 namespace MyPoints.Catalog.Domain.Handlers
 {
-    public class UpdateOrderStatusHandler : Notifiable, IHandler<UpdateOrderStatusCommand, UpdateOrderStatusCommandResult>
+    public class PaymentMadeHandler : Notifiable, IHandler<PaymentMadeCommand, PaymentMadeCommandResult>
     {
         private readonly ICatalogContext _context;
 
-        public UpdateOrderStatusHandler(ICatalogContext context)
+        public PaymentMadeHandler(ICatalogContext context)
         {
             _context = context;
         }
 
-        public async Task<ResultWithData<UpdateOrderStatusCommandResult>> Handle(UpdateOrderStatusCommand request, CancellationToken cancellationToken)
+        public async Task<ResultWithData<PaymentMadeCommandResult>> Handle(PaymentMadeCommand request, CancellationToken cancellationToken)
         {
-            await _context.Order.UpdateOrderAsync(request.OrderId,request.StatusId);
-            return ResultWithData<UpdateOrderStatusCommandResult>.Success(null);
+            PaymentMadeCommandResult result = await _context.Order.UpdateOrderAsync(request);
+
+            return ResultWithData<PaymentMadeCommandResult>.Success(result);
         }
     }
 }

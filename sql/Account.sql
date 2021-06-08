@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS TransactionType (
 CREATE TABLE IF NOT EXISTS Transaction (
     Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     ProductId int NULL,
+    OrderId int NULL,
     Value decimal(15, 2),
     AmountAfter decimal(15, 2),
     TransactionTypeId int NOT NULL,

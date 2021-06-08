@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MyPoints.Account.Domain.Commands.Input;
 using MyPoints.Account.Domain.Commands.Output;
+using MyPoints.Account.Domain.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,9 @@ namespace MyPoints.Account.Domain.Mappers
 
             CreateMap<AddPurchaseTransactionCommand, AddPurchaseTransactionCommandResult>();
             CreateMap<AddRechargeTransactionCommand, AddRechargeTransactionCommandResult>();
+
+            CreateMap<TransactionItemQueryResult, AddPurchaseTransactionCommandResult>()
+                .ForMember(opt => opt.TransactionId,member => member.MapFrom(src => src.Id));
         }
     }
 }

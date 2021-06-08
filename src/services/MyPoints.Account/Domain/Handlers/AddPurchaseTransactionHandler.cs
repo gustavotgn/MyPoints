@@ -3,6 +3,7 @@ using Flunt.Notifications;
 using MyPoints.Account.Data.Interfaces;
 using MyPoints.Account.Domain.Commands.Input;
 using MyPoints.Account.Domain.Commands.Output;
+using MyPoints.Account.Domain.Queries;
 using MyPoints.CommandContract.Entities;
 using MyPoints.CommandContract.Interfaces;
 using System;
@@ -57,8 +58,19 @@ namespace MyPoints.Account.Domain.Handlers
                 _message.Enqueue("payment-rejected",request );
                 return ResultWithData<AddPurchaseTransactionCommandResult>.Success(null);
             }
+            TransactionItemQueryResult transaction = await _context.Transaction.GetByOrderIdAsync(request.OrderId);
 
-            AddPurchaseTransactionCommandResult result = await _context.Transaction.AddAsync(request);
+            AddPurchaseTransactionCommandResult result;
+            if (transaction is null)
+            {
+                result = await _context.Transaction.AddAsync(request);
+            }
+            else
+            {
+                result = _mapper.Map<AddPurchaseTransactionCommandResult>(transaction);
+            }
+
+
             _message.Enqueue("payment-made", result);
 
             return ResultWithData<AddPurchaseTransactionCommandResult>.Success(result);

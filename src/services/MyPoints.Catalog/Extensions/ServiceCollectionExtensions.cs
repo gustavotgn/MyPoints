@@ -48,7 +48,8 @@ namespace MyPoints.Catalog.Extensions
             .AddRabbiMQConsumer<InvalidOrderCommand,InvalidOrderCommandResult>("invalid-order")
             .AddRabbiMQConsumer<InvalidOrderCommand,InvalidOrderCommandResult>("payment-rejected")
             .AddRabbiMQConsumer<UpdateOrderStatusCommand,UpdateOrderStatusCommandResult>("update-order-status")
-            .AddRabbiMQConsumer<RegisterOrderAddressCommand, RegisterOrderAddressCommandResult>("register-order-address");
+            .AddRabbiMQConsumer<RegisterOrderAddressCommand, RegisterOrderAddressCommandResult>("register-order-address")
+            .AddRabbiMQConsumer<PaymentMadeCommand, PaymentMadeCommandResult>("payment-made");
         }
         public static void AddAuth(this IServiceCollection services)
         {

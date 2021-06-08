@@ -3,6 +3,7 @@ using Dapper;
 using MyPoints.Catalog.Data;
 using MyPoints.Catalog.Domain.Commands.Input;
 using MyPoints.Catalog.Domain.Commands.Output;
+using MyPoints.Catalog.Domain.Enums;
 using MyPoints.Catalog.Domain.Queries;
 using MyPoints.Catalog.Repositories.Interfaces;
 using System;
@@ -175,7 +176,7 @@ namespace MyPoints.Catalog.Repositories
             }
         }
 
-        public async Task UpdateOrderAsync(UpdateOrderStatusCommand request)
+        public async Task UpdateOrderAsync(int orderId, EOrderStatus statusId)
         {
             var transaction = _context.Connection.BeginTransaction();
             try
@@ -183,7 +184,7 @@ namespace MyPoints.Catalog.Repositories
 
                 var id = await _context.Connection.ExecuteAsync(@"
                         UPDATE `Order` SET StatusId = @StatusId
-                        WHERE Id = @OrderId AND StatusId<@StatusId", request);
+                        WHERE Id = @orderId AND StatusId < @statusId", new { orderId, statusId});
 
                 transaction.Commit();
             }
@@ -223,6 +224,66 @@ namespace MyPoints.Catalog.Repositories
             catch (Exception ex)
             {
                 transaction.Rollback();
+                throw;
+            }
+        }
+
+        public async Task<PaymentMadeCommandResult> UpdateOrderAsync(PaymentMadeCommand request)
+        {
+            var transaction = _context.Connection.BeginTransaction();
+            try
+            {
+
+                var id = await _context.Connection.ExecuteAsync(@"
+                        UPDATE `Order` SET StatusId = @StatusId, TransactionId= @TransactionId
+                        WHERE Id = @OrderId", request);
+
+                transaction.Commit();
+
+                var result = _mapper.Map<PaymentMadeCommandResult>(request);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw;
+            }
+        }
+
+        public async Task<OrderQueryResult> GetAsync(int id, int userId)
+        {
+            try
+            {
+                var result = new OrderQueryResult();
+                var sql = @"
+                     SELECT 
+                        `Order`.*, 
+                        Product.Description AS Product,
+                        OrderStatus.Description AS Status
+                    FROM `Order`          
+                        LEFT JOIN Product ON Product.Id = `Order`.ProductId
+                        LEFT JOIN OrderStatus ON OrderStatus.Id = `Order`.StatusId
+                    WHERE `Order`.UserId = @userId AND `Order`.Id = @id;
+                    SELECT `OrderNotification`.* FROM `OrderNotification` 
+                        INNER JOIN `Order` ON `OrderNotification`.OrderId = `Order`.Id
+                    WHERE `Order`.UserId = @userId AND `Order`.Id = @id;
+                    SELECT OrderAddress.* FROM OrderAddress
+                        INNER JOIN `Order` ON  `Order`.AddressId = OrderAddress.Id
+                    WHERE `Order`.UserId = @userId AND `Order`.Id = @id;";
+
+                using (var multi = await _context.Connection.QueryMultipleAsync(sql, new { id, userId }))
+                {
+                    result = (await multi.ReadFirstOrDefaultAsync<OrderQueryResult>());
+
+                    result.Notifications = (await multi.ReadAsync<OrderNotificationQueryResult>()).ToList() ;
+
+                    result.Address = await multi.ReadFirstOrDefaultAsync<OrderAddressQueryResult>();
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
                 throw;
             }
         }

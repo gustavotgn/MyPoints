@@ -42,6 +42,24 @@ namespace MyPoints.Catalog.Controllers
             }
             return BadRequest(result.Errors);
         }
+        [HttpPost("Reprocess")]
+        public async Task<IActionResult> Add(ReprocessOrderCommand command)
+        {
+            command.UserId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            command.Validate();
+            if (command.Invalid)
+            {
+                return BadRequest(command.Notifications);
+            }
+
+            var result = await _mediator.Send(command);
+            if (result.Succeeded)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Errors);
+        }
         [HttpGet]
         public async Task<IActionResult> Get()
         {

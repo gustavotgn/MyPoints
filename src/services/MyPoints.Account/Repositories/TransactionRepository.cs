@@ -33,14 +33,15 @@ namespace MyPoints.Account.Repositories
                 account.Amount += request.Value;
 
                 var id = await _context.Connection.ExecuteScalarAsync<int>(@"
-                        INSERT INTO Transaction (ProductId,Value,AmountAfter,TransactionTypeId,AccountId)
-                        VALUES(@ProductId,@Value,@AmountAfter,@TransactionTypeId,@AccountId);
+                        INSERT INTO Transaction (ProductId,Value,AmountAfter,TransactionTypeId,AccountId,OrderId)
+                        VALUES(@ProductId,@Value,@AmountAfter,@TransactionTypeId,@AccountId,@OrderId);
                         SELECT LAST_INSERT_ID();", new {
                     request.ProductId,
                     request.Value,
                     AmountAfter = account.Amount,
                     request.TransactionTypeId,
-                    AccountId = account.Id
+                    AccountId = account.Id,
+                    request.OrderId
                 });
 
                 await _context.Connection.ExecuteAsync("UPDATE Account SET Amount = @Amount WHERE Id = @Id", account);
@@ -106,10 +107,24 @@ namespace MyPoints.Account.Repositories
                 using (var multi = await _context.Connection.QueryMultipleAsync(sql, new { userId }))
                 {
                     result.Account = await multi.ReadFirstOrDefaultAsync<TransactionAccountQueryResult>();
-                    result.TransactionItems = (await multi.ReadAsync<TransactionItemsQueryResult>()).ToList();
+                    result.TransactionItems = (await multi.ReadAsync<TransactionItemQueryResult>()).ToList();
                 }
 
                 return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<TransactionItemQueryResult> GetByOrderIdAsync(int orderId)
+        {
+            try
+            {
+                return await _context.Connection.QueryFirstOrDefaultAsync<TransactionItemQueryResult>(@"
+                    SELECT * FROM Transaction
+                    WHERE Transaction.OrderId = @orderId
+                ", new { orderId});
             }
             catch (Exception ex)
             {

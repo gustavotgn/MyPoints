@@ -13,5 +13,6 @@ namespace MyPoints.Account.Repositories.Interfaces
         Task<TransactionQueryResult> GetByAccountIdAsync(int userId);
         Task<AddPurchaseTransactionCommandResult> AddAsync(AddPurchaseTransactionCommand request);
         Task<AddRechargeTransactionCommandResult> AddAsync(AddRechargeTransactionCommand request);
+        Task<TransactionItemQueryResult> GetByOrderIdAsync(int orderId);
     }
 }

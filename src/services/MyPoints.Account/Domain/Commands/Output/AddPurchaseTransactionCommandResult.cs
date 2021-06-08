@@ -5,6 +5,7 @@ namespace MyPoints.Account.Domain.Commands.Output
 {
     public class AddPurchaseTransactionCommandResult: ICommandResult
     {
+        public int OrderId { get; set; }
         public int TransactionId { get; set; }
         public ETransactionType TransactionTypeId { get; set; }
         public decimal Value { get; set; }
