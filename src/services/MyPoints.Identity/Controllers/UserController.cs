@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MyPoints.Identity.Data.Interfaces;
 using MyPoints.Identity.Domain.Commands.Input;
 using System;
 using System.Collections.Generic;
@@ -9,6 +8,8 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using MyPoints.Identity.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace MyPoints.Identity.Controllers
 {
@@ -17,43 +18,51 @@ namespace MyPoints.Identity.Controllers
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
-        private readonly IIdentityContext _context;
         private readonly IMediator _mediator;
-
-        public UserController(ILogger<UserController> logger, IIdentityContext context, IMediator mediator)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public UserController(ILogger<UserController> logger, IMediator mediator, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
-            _context = context;
             _mediator = mediator;
+            _userManager = userManager;
         }
 
-        [HttpGet()]
-        [Authorize]
-        public async Task<IActionResult> Get()
-        {
-            var id = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        //[HttpGet()]
+        //[Authorize]
+        //public async Task<IActionResult> Get()
+        //{
+        //    var id = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            return Ok(await _context.User.GetAsync(id));
-        }
+        //    return Ok(await _context.User.GetAsync(id));
+        //}
 
 
         [HttpPost()]
         [AllowAnonymous]
-        public async Task<IActionResult> Add([FromBody] AddUserCommand command)
+        public async Task<IActionResult> Get([FromBody] ApplicationUser user)
         {
-            command.Validate();
-            if (command.Invalid)
-            {
-                return BadRequest(command.Notifications);
-            }
-
-            var result = await _mediator.Send(command);
-            if (result.Succeeded)
-            {
-                return Ok(result.Data);
-            }
-            return BadRequest(result.Errors);
+            var result = await _userManager.CreateAsync(user);
+            return Ok(result);
         }
+
+
+        //[HttpPost()]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> Add([FromBody] AddUserCommand command)
+        //{
+        //    command.Validate();
+        //    if (command.Invalid)
+        //    {
+        //        return BadRequest(command.Notifications);
+        //    }
+
+        //    var result = await _mediator.Send(command);
+        //    if (result.Succeeded)
+        //    {
+        //        return Ok(result.Data);
+        //    }
+        //    return BadRequest(result.Errors);
+        //}
         [HttpPost("Address")]
         [Authorize]
         public async Task<IActionResult> Add([FromBody] AddUserAddressCommand command)

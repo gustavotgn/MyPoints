@@ -1,10 +1,15 @@
-﻿using Flunt.Notifications;
+﻿using AutoMapper;
+using Flunt.Notifications;
+using Microsoft.AspNetCore.Identity;
 using MyPoints.CommandContract.Entities;
 using MyPoints.CommandContract.Interfaces;
-using MyPoints.Identity.Data.Interfaces;
+using MyPoints.Identity.Data;
 using MyPoints.Identity.Domain.Commands.Input;
 using MyPoints.Identity.Domain.Commands.Output;
+using MyPoints.Identity.Domain.Entities;
+using MyPoints.Identity.Repositories.Interfaces;
 using MyPoints.Identity.Services;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,19 +19,23 @@ namespace MyPoints.Identity.Domain.Handlers
         IHandler<AddUserCommand, AddUserCommandResult>,
         IHandler<AddUserAddressCommand, AddUserAddressCommandResult>
     {
-        private readonly IIdentityContext _context;
         private readonly IMessageService _message;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMapper _mapper;
+        private readonly IAddressRepository _addressRepository;
 
-        public UserHandler(IIdentityContext context, IMessageService message)
+        public UserHandler(IMessageService message, UserManager<ApplicationUser> userManager, IMapper mapper, IAddressRepository addressRepository)
         {
-            _context = context;
             _message = message;
+            _userManager = userManager;
+            _mapper = mapper;
+            _addressRepository = addressRepository;
         }
 
 
         public async Task<ResultWithData<AddUserCommandResult>> Handle(AddUserCommand request, CancellationToken cancellationToken)
         {
-            int userId = 0;
+            Guid? userId = null;
             string token = null;
             try
             {
@@ -37,12 +46,12 @@ namespace MyPoints.Identity.Domain.Handlers
                     return ResultWithData<AddUserCommandResult>.Failed(request.Notifications);
                 }
 
-                var registeredUser = await _context.User.GetByEmailAsync(request.Email);
+                var registeredUser = await _userManager.FindByEmailAsync(request.Email);
                 if (registeredUser != null)
                 {
                     AddNotification(new Notification("Email", "E-mail already registered"));
                     userId = registeredUser.Id;
-                    token = TokenService.GenerateToken(registeredUser.Id, registeredUser.Name, registeredUser.Email);
+                    token = TokenService.GenerateToken(registeredUser.Id, registeredUser.UserName, registeredUser.Email);
 
                 }
                 if (Invalid)
@@ -50,13 +59,14 @@ namespace MyPoints.Identity.Domain.Handlers
                     return ResultWithData<AddUserCommandResult>.Failed(this.Notifications);
                 }
 
-                var result = await _context.User.AddAsync(request);
+                var createUser = await _userManager.CreateAsync(_mapper.Map<ApplicationUser>(request));
+
+                var result = await _userManager.FindByEmailAsync(request.Email);
 
                 userId = result.Id;
-                result.Token = TokenService.GenerateToken(result.Id, result.Name, result.Email);
-                token = result.Token;
+                token = TokenService.GenerateToken(result.Id, result.UserName, result.Email);
 
-                return ResultWithData<AddUserCommandResult>.Success(result);
+                return ResultWithData<AddUserCommandResult>.Success(null);
             }
             finally
             {
@@ -74,7 +84,7 @@ namespace MyPoints.Identity.Domain.Handlers
                 return ResultWithData<AddUserAddressCommandResult>.Failed(request.Notifications);
             }
 
-            if (await _context.User.AddressExistsAsync(request.UserId))
+            if (await _addressRepository.IsExistsByUserId(request.UserId))
             {
                 AddNotification(new Notification("User", "This User already has address"));
 
@@ -83,10 +93,11 @@ namespace MyPoints.Identity.Domain.Handlers
             {
                 return ResultWithData<AddUserAddressCommandResult>.Failed(this.Notifications);
             }
+            var entity = _mapper.Map<UserAddress>(request);
 
-            var result = await _context.Address.AddAsync(request);
+            await _addressRepository.InsertAsync(entity);
 
-            return ResultWithData<AddUserAddressCommandResult>.Success(result);
+            return ResultWithData<AddUserAddressCommandResult>.Success(_mapper.Map<AddUserAddressCommandResult>(entity));
         }
     }
 }

@@ -9,7 +9,7 @@ namespace MyPoints.Identity.Services
 {
     public static class TokenService
     {
-        public static string GenerateToken(int id,string name, string email)
+        public static string GenerateToken(Guid id,string name, string email)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Configurations.Settings.Secret);

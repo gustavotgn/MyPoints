@@ -2,7 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyPoints.Identity.Domain.Commands.Input;
 using MyPoints.Identity.Domain.Handlers;
-using MyPoints.Identity.Test.Data;
 using MyPoints.Identity.Test.Utils;
 using System;
 using System.Collections.Generic;
@@ -20,14 +19,14 @@ namespace MyPoints.Identity.Test.HandlerTests
         public UserHandlerTest()
         {
             _faker = new Faker("pt_BR");
-            _handler = new UserHandler(new FakeIdentityContext(), new FakeMessageService());
+            _handler = new UserHandler(new FakeMessageService(),null, null,null);
         }
 
         [TestMethod]
         public async Task ValidAddUserHandler()
         {
             var command = new AddUserCommand();
-            _handler = new UserHandler(new FakeIdentityContext(userExists: false), new FakeMessageService());
+            _handler = new UserHandler(new FakeMessageService(), null, null, null);
 
 
             command.Name = $"{_faker.Person.FirstName} {_faker.Person.LastName}";
@@ -42,7 +41,7 @@ namespace MyPoints.Identity.Test.HandlerTests
         public async Task ValidAddAddressHandler()
         {
             var command = new AddUserAddressCommand();
-            _handler = new UserHandler(new FakeIdentityContext(addressExists: false), new FakeMessageService());
+            _handler = new UserHandler(new FakeMessageService(), null, null, null);
 
 
             command.Street = _faker.Person.Address.Street;
@@ -61,7 +60,7 @@ namespace MyPoints.Identity.Test.HandlerTests
         public async Task UserAddressAlreadyRegistered()
         {
             var command = new AddUserAddressCommand();
-            _handler = new UserHandler(new FakeIdentityContext(addressExists: true), new FakeMessageService());
+            _handler = new UserHandler(new FakeMessageService(), null, null, null);
 
 
             command.Street = _faker.Person.Address.Street;
@@ -80,7 +79,7 @@ namespace MyPoints.Identity.Test.HandlerTests
         public async Task UserAlreadyRegistered()
         {
             var command = new AddUserCommand();
-            _handler = new UserHandler(new FakeIdentityContext(userExists: true), new FakeMessageService());
+            _handler = new UserHandler(new FakeMessageService(), null, null, null);
 
 
             command.Name = $"{_faker.Person.FirstName} {_faker.Person.LastName}";

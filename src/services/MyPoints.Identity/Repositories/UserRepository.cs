@@ -7,71 +7,86 @@ using MyPoints.Identity.Domain.Commands.Input;
 using MyPoints.Identity.Domain.Queries;
 using MyPoints.Identity.Domain.Commands.Output;
 using AutoMapper;
+using System.Linq;
+using MyPoints.Identity.Domain.Entities;
+using System.Collections.Generic;
 
 namespace MyPoints.Identity.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository :  IUserRepository
     {
-        private IdentityContext _context;
+        private ApplicationDbContext _context;
         private IMapper _mapper;
 
-        public UserRepository(IdentityContext identityContext, IMapper mapper)
+        public UserRepository(IMapper mapper, ApplicationDbContext context)
         {
-            _context = identityContext;
             _mapper = mapper;
+            _context = context;
         }
 
-        public async Task<AddUserCommandResult> AddAsync(AddUserCommand user)
+        public Task<AddUserCommandResult> AddAsync(AddUserCommand command)
         {
-            var transaction = _context.Connection.BeginTransaction();
-            try
-            {
-                var id = await _context.Connection.ExecuteScalarAsync<int>("INSERT INTO User (Name,Email,Password)VALUES(@Name,@Email,@Password);SELECT LAST_INSERT_ID();", user);
-                
-                transaction.Commit();
-
-                var result = _mapper.Map<AddUserCommandResult>(user);
-                result.Id = id;
-
-                return result;
-
-            }
-            catch (Exception ex)
-            {
-                transaction.Rollback();
-                throw;
-            }
-
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> AddressExistsAsync(int id)
+        public Task<bool> AddressExistsAsync(int userId)
         {
-            return (await _context.Connection.QueryFirstAsync<int?>("SELECT AddressId FROM User WHERE Id=@id", new { id })).HasValue;
+            throw new NotImplementedException();
         }
 
-        public async Task<UserQueryResult> GetByEmailAsync(string email)
+        public Task Delete(Guid id, Guid updatedUser)
         {
-            return await _context.Connection.QueryFirstOrDefaultAsync<UserQueryResult>("SELECT * FROM User WHERE Email=@email", new { email });
+            throw new NotImplementedException();
         }
 
-        public async Task<LoginCommandResult> GetAsync(LoginCommand request)
+        public Task DeleteRange(IEnumerable<ApplicationUser> obj)
         {
-            return await _context.Connection.QueryFirstOrDefaultAsync<LoginCommandResult>("SELECT Email,Name,Id FROM User WHERE Email=@Email AND `Password`=@Password",request);
+            throw new NotImplementedException();
         }
 
-        public async Task<UserQueryResult> GetAsync(int id)
+        public Task<UserQueryResult> GetAsync(Guid id)
         {
-            var result = new UserQueryResult();
-            var sql = @"SELECT * FROM User WHERE Id=@id;
-                        SELECT Address.* FROM Address
-                        INNER JOIN User ON User.AddressId = Address.Id WHERE User.Id = @id;";
+            throw new NotImplementedException();
+        }
 
-            using (var multi = await _context.Connection.QueryMultipleAsync(sql, new { id }))
-            {
-                result = await multi.ReadFirstOrDefaultAsync<UserQueryResult>();
-                result.Address= await multi.ReadFirstOrDefaultAsync<UserAddressQueryResult>();
-            }
-            return result;
+        public Task<LoginCommandResult> GetAsync(LoginCommand request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<UserQueryResult> GetByEmailAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task InsertAsync(ApplicationUser obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task InsertRange(IEnumerable<ApplicationUser> obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApplicationUser> Select(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<ApplicationUser>> Select()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Update(ApplicationUser obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateRange(IEnumerable<ApplicationUser> obj)
+        {
+            throw new NotImplementedException();
         }
     }
 }

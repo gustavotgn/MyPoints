@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using MyPoints.Identity.Domain.Commands.Input;
 using MyPoints.Identity.Domain.Commands.Output;
+using MyPoints.Identity.Domain.Entities;
 using MyPoints.Identity.Domain.Queries;
 using MyPoints.Identity.Repositories.Interfaces;
 using MyPoints.Identity.Test.Utils;
@@ -31,7 +32,7 @@ namespace MyPoints.Identity.Test.Repositories
         public async Task<AddUserCommandResult> AddAsync(AddUserCommand command)
         {
             return new AddUserCommandResult {
-                Id = 1,
+                Id = Guid.NewGuid(),
                 Email = command.Email,
                 Name = command.Name,
             };
@@ -42,12 +43,22 @@ namespace MyPoints.Identity.Test.Repositories
             return addressExists;
         }
 
-        public async Task<UserQueryResult> GetAsync(int id)
+        public Task Delete(Guid id, Guid updatedUser)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteRange(IEnumerable<ApplicationUser> obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<UserQueryResult> GetAsync(Guid id)
         {
             if (_userExists)
             {
                 return new UserQueryResult {
-                    Id = 1,
+                    Id = Guid.NewGuid(),
                     Email = _faker.Person.Email,
                     Name = $"{_faker.Person.FirstName} {_faker.Person.LastName}",
                     Address = new UserAddressQueryResult {
@@ -80,7 +91,7 @@ namespace MyPoints.Identity.Test.Repositories
             if (_userExists)
             {
                 return new UserQueryResult {
-                    Id = 1,
+                    Id = Guid.NewGuid(),
                     Email = email,
                     Name = $"{_faker.Person.FirstName} {_faker.Person.LastName}",
                     Address = new UserAddressQueryResult {
@@ -95,6 +106,36 @@ namespace MyPoints.Identity.Test.Repositories
                 };
             }
             return null;
+        }
+
+        public Task InsertAsync(ApplicationUser obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task InsertRange(IEnumerable<ApplicationUser> obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApplicationUser> Select(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<ApplicationUser>> Select()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Update(ApplicationUser obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateRange(IEnumerable<ApplicationUser> obj)
+        {
+            throw new NotImplementedException();
         }
     }
 }

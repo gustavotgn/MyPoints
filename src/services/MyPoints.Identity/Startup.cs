@@ -60,14 +60,14 @@ namespace MyPoints.Identity
                 app.UseDeveloperExceptionPage();
             }
 
-            // Gera o endpoint que retornará os dados utilizados no dashboard
-            app.UseHealthChecks("/healthchecks-data-ui", new HealthCheckOptions() {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
+            //// Gera o endpoint que retornará os dados utilizados no dashboard
+            //app.UseHealthChecks("/healthchecks-data-ui", new HealthCheckOptions() {
+            //    Predicate = _ => true,
+            //    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            //});
 
-            // Ativa o dashboard para a visualização da situação de cada Health Check
-            app.UseHealthChecksUI();
+            //// Ativa o dashboard para a visualização da situação de cada Health Check
+            //app.UseHealthChecksUI();
 
 
             app.UseHttpsRedirection();

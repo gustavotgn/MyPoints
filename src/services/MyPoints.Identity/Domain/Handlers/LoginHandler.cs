@@ -1,9 +1,10 @@
 ﻿using Flunt.Notifications;
+using Microsoft.AspNetCore.Identity;
 using MyPoints.CommandContract.Entities;
 using MyPoints.CommandContract.Interfaces;
-using MyPoints.Identity.Data.Interfaces;
 using MyPoints.Identity.Domain.Commands.Input;
 using MyPoints.Identity.Domain.Commands.Output;
+using MyPoints.Identity.Domain.Entities;
 using MyPoints.Identity.Services;
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,13 @@ namespace MyPoints.Identity.Domain.Handlers
     public class LoginHandler : Notifiable,
         IHandler<LoginCommand, LoginCommandResult>
     {
-        private readonly IIdentityContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public LoginHandler(IIdentityContext context)
+
+        public LoginHandler(UserManager<ApplicationUser> userManager)
         {
-            _context = context;
+            this._userManager = userManager;
         }
-
 
         public async Task<ResultWithData<LoginCommandResult>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
@@ -32,7 +33,9 @@ namespace MyPoints.Identity.Domain.Handlers
             {
                 return ResultWithData<LoginCommandResult>.Failed(request.Notifications);
             }
-            LoginCommandResult result = await _context.User.GetAsync(request);
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            LoginCommandResult result = new LoginCommandResult();
 
             if (result is null)
             {

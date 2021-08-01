@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyPoints.Identity.Data.Interfaces;
 using MyPoints.Identity.Domain.Commands.Input;
 using System.Threading.Tasks;
 
@@ -11,12 +10,10 @@ namespace MyPoints.Identity.Controllers
     [Route("[controller]")]
     public class LoginController : Controller
     {
-        private readonly IIdentityContext _context;
         private readonly IMediator _mediator;
 
-        public LoginController(IIdentityContext context, IMediator mediator)
+        public LoginController( IMediator mediator)
         {
-            _context = context;
             _mediator = mediator;
         }
 

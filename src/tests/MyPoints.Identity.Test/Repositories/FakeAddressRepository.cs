@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using MyPoints.Identity.Domain.Commands.Input;
 using MyPoints.Identity.Domain.Commands.Output;
+using MyPoints.Identity.Domain.Entities;
 using MyPoints.Identity.Domain.Queries;
 using MyPoints.Identity.Repositories.Interfaces;
 using System;
@@ -43,6 +44,51 @@ namespace MyPoints.Identity.Test.Repositories
                 State = _faker.Person.Address.State,
                 Street = _faker.Person.Address.Street
             };
+        }
+
+        public Task<bool> IsExistsByUserId(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task InsertAsync(UserAddress obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task InsertRange(IEnumerable<UserAddress> obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Update(UserAddress obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateRange(IEnumerable<UserAddress> obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Delete(Guid id, Guid updatedUser)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteRange(IEnumerable<UserAddress> obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<UserAddress> Select(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<UserAddress>> Select()
+        {
+            throw new NotImplementedException();
         }
     }
 }
