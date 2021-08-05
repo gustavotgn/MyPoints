@@ -3,9 +3,11 @@ name: MyPoints.Identity
 on:
   push:
     branches: [ master ]
+    paths: [src/services/MyPoints.Identity, src/libs, src/tests/MyPoints.Identity.Test]
+
   pull_request:
     branches: [ master ]
-
+    paths: [src/services/MyPoints.Identity, src/libs, src/tests/MyPoints.Identity.Test]
 
 jobs:
   build-and-deploy:
