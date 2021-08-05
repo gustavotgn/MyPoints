@@ -23,5 +23,5 @@ jobs:
         run: dotnet build src/services/MyPoints.Identity/MyPoints.Identity.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o dev/myapp
+        run: dotnet publish src/services/MyPoints.Identity/MyPoints.Identity.csproj -c Release -o dev/myapp
 
