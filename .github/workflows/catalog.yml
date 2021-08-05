@@ -9,7 +9,10 @@ on:
       - src/tests/MyPoints.Catalog.Test]
   pull_request:
     branches: [ master ]
-    paths: [src/services/MyPoints.Catalog, src/libs, src/tests/MyPoints.Catalog.Test]
+    paths: 
+      - src/services/MyPoints.Catalog
+      - src/libs
+      - src/tests/MyPoints.Catalog.Test]
 jobs:
 
   build:
