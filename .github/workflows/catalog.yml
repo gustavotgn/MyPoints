@@ -1,11 +1,12 @@
-name: Docker Image CI
+name: MyPoints.Catalog CI
 
 on:
   push:
     branches: [ master ]
+    paths: [src/services/MyPoints.Catalog, src/libs, src/tests/MyPoints.Catalog.Test]
   pull_request:
     branches: [ master ]
-
+    paths: [src/services/MyPoints.Catalog, src/libs, src/tests/MyPoints.Catalog.Test]
 jobs:
 
   build:
