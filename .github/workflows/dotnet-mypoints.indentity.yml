@@ -1,4 +1,4 @@
-name: .NET
+name: MyPoints.Identity
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
           dotnet-version: "3.1.102"
 
       - name: Build with dotnet
-        run: dotnet build MyPoints.sln --configuration Release
+        run: dotnet build src/services/MyPoints.Identity/MyPoints.Identity.csproj --configuration Release
 
       - name: dotnet publish
         run: dotnet publish -c Release -o dev/myapp
